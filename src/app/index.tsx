@@ -1,7 +1,6 @@
 import React from "react";
 import "./index.styl";
 import Catalog from "src/app/component/catalog";
-import { observe } from "@sky0014/store";
 import { catalog } from "src/store/catalog";
 
 function App() {
@@ -16,4 +15,4 @@ function App() {
   );
 }
 
-export default observe(App);
+export default App;

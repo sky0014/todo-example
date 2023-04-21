@@ -1,4 +1,3 @@
-import { observe } from "@sky0014/store";
 import React, { memo } from "react";
 import { TodoItem, todo } from "src/store/todo";
 
@@ -12,4 +11,4 @@ function Todo(props: { todo: TodoItem }) {
   );
 }
 
-export default memo(observe(Todo));
+export default memo(Todo);
