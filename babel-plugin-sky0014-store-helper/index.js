@@ -4,12 +4,31 @@ const LIB = "@sky0014/store";
 const CREATE_STORE = "createStore";
 const OBSERVE = "observe";
 
-module.exports = function ({ assertVersion, types: t, template }, {}) {
+const _hooksWatched = [
+  "useEffect",
+  "useLayoutEffect",
+  "useCallback",
+  "useMemo",
+  "useImperativeHandle",
+];
+
+module.exports = function (
+  { assertVersion, types: t, template },
+  options = {
+    hooksWatched: {},
+  }
+) {
   assertVersion(7);
 
+  // options
+  const hooksWatched = { ..._hooksWatched, ...options.hooksWatched };
+
+  // const
   const jsxMap = {};
+  const storeMap = {};
   const observeImport = template.ast(`import { ${OBSERVE} } from "${LIB}";`);
 
+  // utils
   function findObserve(path) {
     const binding = path.scope.getBinding(OBSERVE);
     if (binding) {
@@ -72,8 +91,19 @@ module.exports = function ({ assertVersion, types: t, template }, {}) {
     }
   }
 
+  function isStore(path, name) {
+    return storeMap[name];
+  }
+
+  function addObserveImport(path, state) {
+    if (!findObserve(path)) {
+      state.file.path.pushContainer("body", observeImport);
+    }
+  }
+
   return {
     name: "sky0014-store-helper",
+
     visitor: {
       // get all jsx element
       JSXOpeningElement(path, state) {
@@ -102,6 +132,27 @@ module.exports = function ({ assertVersion, types: t, template }, {}) {
         }
       },
 
+      FunctionDeclaration(path, state) {
+        path.traverse({
+          MemberExpression(path2, state) {
+            if (t.isCallExpression(path2.parentPath)) {
+              // store.action(...) ignored
+              return;
+            }
+
+            const object = path2.get("object");
+            if (t.isIdentifier(object)) {
+              const name = object.node.name;
+              if (isStore(object, name)) {
+                console.log(`function: ${path}`);
+                console.log(`use store: ${object.node.name}`);
+                path2.stop();
+              }
+            }
+          },
+        });
+      },
+
       // export { Fc }
       // export { Fc as Fc2 }
       // export const Fc = ...
@@ -112,13 +163,7 @@ module.exports = function ({ assertVersion, types: t, template }, {}) {
         const arr = jsxMap[normalized];
         if (arr?.length) {
           // add import
-          if (!findObserve(path)) {
-            // is observe not imported
-            const importer = template.ast(
-              `import { ${OBSERVE} } from "${LIB}";`
-            );
-            state.file.path.pushContainer("body", importer);
-          }
+          addObserveImport(path, state);
 
           arr.forEach((name) => {
             // export { Fc }
@@ -152,9 +197,7 @@ module.exports = function ({ assertVersion, types: t, template }, {}) {
           const find = arr.find((name) => name === "default");
           if (find) {
             // add import
-            if (!findObserve(path)) {
-              state.file.path.pushContainer("body", observeImport);
-            }
+            addObserveImport(path, state);
 
             // wrap observe
             const declaration = path.get("declaration");
@@ -177,6 +220,7 @@ module.exports = function ({ assertVersion, types: t, template }, {}) {
             const p = path.findParent((p) => t.isVariableDeclarator(p.node));
             if (p) {
               console.log(state.filename, "find store: ", p.node.id.name);
+              storeMap[p.node.id.name] = true;
             }
           }
         }
