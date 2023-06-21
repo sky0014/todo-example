@@ -1,4 +1,3 @@
-import { observe } from "@sky0014/store";
 import React, { memo } from "react";
 import Todo from "src/app/component/todo";
 import { CatalogItem } from "src/store/catalog";
@@ -30,4 +29,4 @@ function Catalog(props: { catalog: CatalogItem }) {
   );
 }
 
-export default memo(observe(Catalog));
+export default memo(Catalog);
