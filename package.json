@@ -21,6 +21,7 @@
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "babel-loader": "^8.1.0",
+    "babel-plugin-sky0014-store-helper": "^1.0.0",
     "css-loader": "^6.3.0",
     "eslint": "^7.32.0",
     "eslint-plugin-react": "^7.24.0",
@@ -43,7 +44,7 @@
   },
   "dependencies": {
     "@sky0014/logger": "^1.0.7",
-    "@sky0014/store": "^1.4.0",
+    "@sky0014/store": "^2.1.1",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

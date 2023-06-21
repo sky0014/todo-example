@@ -8,13 +8,28 @@ configStore({
   debug: true,
 });
 
-export interface TodoItem {
-  id: string;
-  catalogId: string;
-  content: string;
+export class TodoItem {
+  id!: string;
+  catalogId!: string;
+  content!: string;
   createTime?: number;
   doneTime?: number;
   deadline?: number;
+
+  get isDone() {
+    return !!this.doneTime;
+  }
+
+  constructor(init: {
+    id: string;
+    catalogId: string;
+    content: string;
+    createTime?: number;
+    doneTime?: number;
+    deadline?: number;
+  }) {
+    Object.assign(this, init);
+  }
 }
 
 class Todo {
@@ -22,13 +37,13 @@ class Todo {
 
   /** 添加待办 */
   addTodo(todo: { content: string; catalogId: string; deadline?: number }) {
-    const todoItem: TodoItem = {
+    const todoItem = new TodoItem({
       id: uuidV4(),
       catalogId: todo.catalogId,
       createTime: Date.now(),
       content: todo.content,
       deadline: todo.deadline,
-    };
+    });
     this.items[todoItem.id] = todoItem;
 
     catalog.addTodo(todoItem.catalogId, todoItem.id);
@@ -73,12 +88,3 @@ class Todo {
 }
 
 export const todo = createStore(new Todo());
-
-// 持久化处理
-export async function initTodo() {
-  await persist(todo, {
-    key: "todo",
-    ver: 0,
-    storage: localStorage,
-  });
-}

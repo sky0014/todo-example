@@ -6,7 +6,7 @@ function Todo(props: { todo: TodoItem }) {
 
   return (
     <div onClick={() => todo.completeTodo(props.todo.id)}>
-      {props.todo.content} {props.todo.doneTime && "done"}
+      {props.todo.content} {props.todo.isDone && "done"}
     </div>
   );
 }

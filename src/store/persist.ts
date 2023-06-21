@@ -1,8 +1,10 @@
-import { persist as storePersist } from "@sky0014/store";
+import { persist as storePersist, serial } from "@sky0014/store";
 import { catalog } from "src/store/catalog";
-import { todo } from "src/store/todo";
+import { TodoItem, todo } from "src/store/todo";
 
 export async function persist() {
+  serial.register({ TodoItem });
+
   await storePersist(todo, {
     key: "todo",
     ver: 0,
