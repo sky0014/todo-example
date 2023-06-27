@@ -1,3 +1,5 @@
+import { DeleteOutlined } from "@ant-design/icons";
+import { Dropdown, List } from "antd";
 import React, { memo } from "react";
 import Todo from "src/app/component/todo";
 import { CatalogItem } from "src/store/catalog";
@@ -6,26 +8,42 @@ import { todo } from "src/store/todo";
 function Catalog(props: { catalog: CatalogItem }) {
   console.log("render Catalog");
 
+  const data = props.catalog.todos.slice().sort((a, b) => {
+    const todoA = todo.items[a];
+    const todoB = todo.items[b];
+    if (todoA.isDone === todoB.isDone) {
+      return todoB.createTime - todoA.createTime;
+    }
+    return todoA.isDone ? 1 : -1;
+  });
+
   return (
-    <div>
-      <div>{props.catalog.name}</div>
-      <div>{props.catalog.description}</div>
-      <button
-        onClick={() =>
-          todo.addTodo({
-            catalogId: props.catalog.id,
-            content: "tttttt" + Math.random(),
-          })
-        }
-      >
-        +
-      </button>
-      <div>
-        {props.catalog.todos.map((id) => (
-          <Todo key={id} todo={todo.items[id]} />
-        ))}
-      </div>
-    </div>
+    <List
+      dataSource={data}
+      renderItem={(todoId) => (
+        <Dropdown
+          key={todoId}
+          trigger={["contextMenu"]}
+          menu={{
+            items: [
+              {
+                key: 1,
+                label: "删除",
+                danger: true,
+                icon: <DeleteOutlined />,
+                onClick: () => {
+                  todo.deleteTodo(todoId, props.catalog.id);
+                },
+              },
+            ],
+          }}
+        >
+          <List.Item>
+            <Todo todo={todo.items[todoId]} />
+          </List.Item>
+        </Dropdown>
+      )}
+    />
   );
 }
 

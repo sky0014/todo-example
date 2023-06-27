@@ -12,7 +12,7 @@ export class TodoItem {
   id!: string;
   catalogId!: string;
   content!: string;
-  createTime?: number;
+  createTime!: number;
   doneTime?: number;
   deadline?: number;
 
@@ -77,6 +77,14 @@ class Todo {
     const todoItem = this.items[todoId];
     if (todoItem) {
       todoItem.doneTime = Date.now();
+    }
+  }
+
+  /** 取消完成待办 */
+  unCompleteTodo(todoId: string) {
+    const todoItem = this.items[todoId];
+    if (todoItem) {
+      delete todoItem.doneTime;
     }
   }
 
