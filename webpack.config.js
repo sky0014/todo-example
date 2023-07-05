@@ -26,13 +26,28 @@ module.exports = (env, argv) => {
           use: ["babel-loader"],
         },
         {
-          test: /\.(css|styl)$/,
+          test: /\.(css)$/,
           use: [
             MiniCssExtractPlugin.loader,
             {
               loader: "css-loader",
               options: {
-                importLoaders: 0,
+                importLoaders: 2,
+                modules: true,
+              },
+            },
+            "postcss-loader",
+          ],
+        },
+        {
+          test: /\.(styl)$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: "css-loader",
+              options: {
+                importLoaders: 2,
+                modules: true,
               },
             },
             "postcss-loader",
@@ -40,7 +55,7 @@ module.exports = (env, argv) => {
           ],
         },
         {
-          test: /\.(jpg|png)$/,
+          test: /\.(jpg|png|svga)$/,
           type: "asset/resource",
         },
         {
