@@ -1,5 +1,6 @@
-import { DeleteOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Dropdown, List } from "antd";
+import copy from "copy-to-clipboard";
 import React, { memo } from "react";
 import Todo from "src/app/component/todo";
 import { CatalogItem } from "src/store/catalog";
@@ -28,6 +29,14 @@ function Catalog(props: { catalog: CatalogItem }) {
             items: [
               {
                 key: 1,
+                label: "复制内容",
+                icon: <CopyOutlined />,
+                onClick: () => {
+                  copy(todo.items[todoId].content);
+                },
+              },
+              {
+                key: 2,
                 label: "删除",
                 danger: true,
                 icon: <DeleteOutlined />,

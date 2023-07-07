@@ -1,5 +1,6 @@
 import { Checkbox } from "antd";
 import React, { memo } from "react";
+import cn from "classnames";
 import { TodoItem, todo } from "src/store/todo";
 
 import style from "./index.module.styl";
@@ -9,7 +10,9 @@ function Todo(props: { todo: TodoItem }) {
 
   return (
     <Checkbox
-      className={props.todo.isDone && style.done}
+      className={cn(style.todo, {
+        [style.done]: props.todo.isDone,
+      })}
       defaultChecked={props.todo.isDone}
       onChange={(event) => {
         if (event.target.checked) {

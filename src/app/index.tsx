@@ -1,10 +1,28 @@
-import React, { useRef } from "react";
+import React, { MutableRefObject, forwardRef, useEffect, useRef } from "react";
 import "./index.styl";
 import Catalog from "src/app/component/catalog";
 import { catalog } from "src/store/catalog";
-import { Collapse, ConfigProvider, Input, InputRef, Modal } from "antd";
+import {
+  Collapse,
+  ConfigProvider,
+  Input,
+  InputProps,
+  InputRef,
+  Modal,
+} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { todo } from "src/store/todo";
+
+const AutoFocusInput = forwardRef<InputRef, InputProps>(function AutoFocusInput(
+  props,
+  ref
+) {
+  useEffect(() => {
+    (ref as MutableRefObject<InputRef>)?.current?.focus();
+  }, []);
+
+  return <Input {...props} ref={ref} />;
+});
 
 function App() {
   console.log("render app");
@@ -34,21 +52,31 @@ function App() {
             <PlusOutlined
               onClick={(event) => {
                 event.stopPropagation();
-                Modal.confirm({
+
+                const onOk = () => {
+                  const content = addInputRef.current?.input?.value;
+                  if (content) {
+                    todo.addTodo({
+                      catalogId: catalog.id,
+                      content,
+                    });
+                  }
+                };
+                const modal = Modal.confirm({
                   icon: null,
                   title: "请输入",
+                  autoFocusButton: null,
                   content: (
-                    <Input placeholder="您的待办事项" ref={addInputRef} />
+                    <AutoFocusInput
+                      placeholder="您的待办事项"
+                      ref={addInputRef}
+                      onPressEnter={() => {
+                        onOk();
+                        modal.destroy();
+                      }}
+                    />
                   ),
-                  onOk() {
-                    const content = addInputRef.current?.input?.value;
-                    if (content) {
-                      todo.addTodo({
-                        catalogId: catalog.id,
-                        content,
-                      });
-                    }
-                  },
+                  onOk,
                 });
               }}
             />
