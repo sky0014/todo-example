@@ -1,5 +1,5 @@
 import { Checkbox } from "antd";
-import React, { memo } from "react";
+import React from "react";
 import cn from "classnames";
 import { TodoItem, todo } from "src/store/todo";
 
@@ -27,4 +27,4 @@ function Todo(props: { todo: TodoItem }) {
   );
 }
 
-export default memo(Todo);
+export default Todo;

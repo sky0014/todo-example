@@ -16,6 +16,11 @@ A todo tool.
   npm run build
   ```
 
+## TODO
+
+- 去掉警告
+- 使用 lazy 验证 store
+
 ## Reference
 
 - [https://www.stylus-lang.cn/](https://www.stylus-lang.cn/)

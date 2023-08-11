@@ -48,7 +48,7 @@ class Catalog {
   }
 
   /** 分类删除todo */
-  deleteTodo(catalogId: string, todoId: string) {
+  deleteTodo(todoId: string, catalogId: string) {
     const item = this.items[catalogId];
     if (item) {
       const index = item.todos.indexOf(todoId);

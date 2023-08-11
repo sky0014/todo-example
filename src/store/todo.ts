@@ -1,11 +1,12 @@
 // store设计原则：归一化
 // https://cn.redux.js.org/usage/structuring-reducers/normalizing-state-shape
-import { configStore, createStore, persist } from "@sky0014/store";
+import { configStore, createStore } from "@sky0014/store";
 import { catalog } from "src/store/catalog";
 import { v4 as uuidV4 } from "uuid";
 
 configStore({
   debug: true,
+  autoMemo: true,
 });
 
 export class TodoItem {
@@ -63,7 +64,7 @@ class Todo {
       // 移动分类
       if (todo.catalogId && todo.catalogId !== todoItem.catalogId) {
         // 原分类删除
-        catalog.deleteTodo(todoItem.catalogId, todo.id);
+        catalog.deleteTodo(todo.id, todoItem.catalogId);
         // 新分类添加
         catalog.addTodo(todo.catalogId, todo.id);
         // todo自身
@@ -91,7 +92,7 @@ class Todo {
   /** 删除待办 */
   deleteTodo(todoId: string, catalogId: string) {
     delete this.items[todoId];
-    catalog.deleteTodo(catalogId, todoId);
+    catalog.deleteTodo(todoId, catalogId);
   }
 }
 

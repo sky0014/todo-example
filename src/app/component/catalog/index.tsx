@@ -1,7 +1,7 @@
 import { CopyOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Dropdown, List } from "antd";
 import copy from "copy-to-clipboard";
-import React, { memo } from "react";
+import React from "react";
 import Todo from "src/app/component/todo";
 import { CatalogItem } from "src/store/catalog";
 import { todo } from "src/store/todo";
@@ -56,4 +56,4 @@ function Catalog(props: { catalog: CatalogItem }) {
   );
 }
 
-export default memo(Catalog);
+export default Catalog;
