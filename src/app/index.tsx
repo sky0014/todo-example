@@ -27,6 +27,7 @@ const AutoFocusInput = forwardRef<InputRef, InputProps>(function AutoFocusInput(
 function App() {
   console.log("render app");
 
+  const [modal, contextHolder] = Modal.useModal();
   const addInputRef = useRef<InputRef>(null);
 
   return (
@@ -62,7 +63,7 @@ function App() {
                     });
                   }
                 };
-                const modal = Modal.confirm({
+                const { destroy } = modal.confirm({
                   icon: null,
                   title: "请输入",
                   autoFocusButton: null,
@@ -72,7 +73,7 @@ function App() {
                       ref={addInputRef}
                       onPressEnter={() => {
                         onOk();
-                        modal.destroy();
+                        destroy();
                       }}
                     />
                   ),
@@ -83,6 +84,7 @@ function App() {
           ),
         }))}
       />
+      {contextHolder}
     </ConfigProvider>
   );
 }
