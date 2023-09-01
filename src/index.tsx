@@ -5,6 +5,10 @@ import App from "src/app";
 import { persist } from "src/store/persist";
 import { setDefaultCatalog } from "src/store/catalog";
 
+import "./index.styl";
+import { config } from "src/store/config";
+import { getIsDarkMode } from "src/common/hooks/useDarkMode";
+
 async function main() {
   logger.initLogger({
     prefix: "todo",
@@ -18,6 +22,10 @@ async function main() {
   if (!localStorage.getItem(FIRST_TIME_RUNED)) {
     setDefaultCatalog();
     localStorage.setItem(FIRST_TIME_RUNED, "true");
+  }
+
+  if (config.autoTheme) {
+    config.changeTheme(getIsDarkMode() ? "dark" : "light");
   }
 
   // render

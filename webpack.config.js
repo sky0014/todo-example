@@ -27,29 +27,13 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.(css)$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            {
-              loader: "css-loader",
-              options: {
-                importLoaders: 2,
-                modules: true,
-              },
-            },
-            "postcss-loader",
-          ],
+          use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
         },
         {
           test: /\.(styl)$/,
           use: [
             MiniCssExtractPlugin.loader,
-            {
-              loader: "css-loader",
-              options: {
-                importLoaders: 2,
-                modules: true,
-              },
-            },
+            "css-loader",
             "postcss-loader",
             "stylus-loader",
           ],
