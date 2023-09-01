@@ -19,9 +19,11 @@ A todo tool.
 ## TODO
 
 - [x] 去掉警告
+- [x] catalog 展开状态记忆
 - [ ] 使用 lazy 验证 store
 - [ ] PWA 离线应用
 - [ ] 封装成 app，类似 electron mobile
+- [ ] 服务端存储
 
 ## Reference
 

@@ -94,9 +94,18 @@ function App() {
         </Row>
 
         <Collapse
-          defaultActiveKey={Object.values(catalog.items).map(
-            (catalog) => catalog.id
-          )}
+          onChange={(key) => {
+            const arr = key as string[];
+            Object.values(catalog.items).forEach((item) => {
+              const expand = arr.indexOf(item.id) !== -1;
+              if (expand !== item.expand) {
+                catalog.modify({ id: item.id, expand });
+              }
+            });
+          }}
+          defaultActiveKey={Object.values(catalog.items)
+            .filter((catalog) => catalog.expand)
+            .map((catalog) => catalog.id)}
           items={Object.values(catalog.items).map((catalog) => ({
             key: catalog.id,
             label: `${catalog.description} (${catalog.name})`,

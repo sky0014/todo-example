@@ -6,6 +6,7 @@ export interface CatalogItem {
   name: string;
   description: string;
   todos: string[];
+  expand: boolean;
 }
 
 class Catalog {
@@ -19,15 +20,17 @@ class Catalog {
       name: catalog.name,
       description: catalog.description,
       todos: [],
+      expand: true,
     };
   }
 
   /** 修改分类 */
-  modify(catalog: { id: string; name?: string; description?: string }) {
+  modify(catalog: Partial<CatalogItem> & { id: string }) {
     const item = this.items[catalog.id];
     if (item) {
-      item.name = catalog.name ?? item.name;
-      item.description = catalog.description ?? item.description;
+      const { id, ...rest } = catalog;
+      // @ts-ignore
+      Object.keys(rest).forEach((key) => (item[key] = catalog[key]));
     }
   }
 
