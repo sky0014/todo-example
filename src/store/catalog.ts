@@ -20,7 +20,7 @@ class Catalog {
       name: catalog.name,
       description: catalog.description,
       todos: [],
-      expand: true,
+      expand: false,
     };
   }
 
@@ -46,6 +46,7 @@ class Catalog {
       const index = item.todos.indexOf(todoId);
       if (index === -1) {
         item.todos.push(todoId);
+        item.expand = true;
       }
     }
   }
@@ -57,6 +58,9 @@ class Catalog {
       const index = item.todos.indexOf(todoId);
       if (index !== -1) {
         item.todos.splice(index, 1);
+        if (item.todos.length === 0) {
+          item.expand = false;
+        }
       }
     }
   }

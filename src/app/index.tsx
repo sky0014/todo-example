@@ -49,7 +49,7 @@ function App() {
 
   return (
     <ConfigProvider theme={config.themeConfig}>
-      <Space direction="vertical">
+      <Space direction="vertical" style={{ width: "100%" }}>
         <Row justify="space-between">
           <Col>
             <Typography.Text>你的待办</Typography.Text>
@@ -103,7 +103,7 @@ function App() {
               }
             });
           }}
-          defaultActiveKey={Object.values(catalog.items)
+          activeKey={Object.values(catalog.items)
             .filter((catalog) => catalog.expand)
             .map((catalog) => catalog.id)}
           items={Object.values(catalog.items).map((catalog) => ({

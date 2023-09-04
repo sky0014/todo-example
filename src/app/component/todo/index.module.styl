@@ -1,5 +1,11 @@
+@import 'src/common/styles/common.styl'
+
 .todo
+  width: 100%
   user-select: none
+
+  & span:nth-child(2)
+    @extend .ellipsis
 
 .done
   color: var(--todo-done-color)
