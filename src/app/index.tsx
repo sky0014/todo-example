@@ -1,4 +1,10 @@
-import React, { MutableRefObject, forwardRef, useEffect, useRef } from "react";
+import React, {
+  MutableRefObject,
+  forwardRef,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import Catalog from "src/app/component/catalog";
 import { catalog } from "src/store/catalog";
 import {
@@ -36,16 +42,17 @@ function App() {
   const isDarkMode = useDarkMode();
   const [modal, contextHolder] = Modal.useModal();
   const addInputRef = useRef<InputRef>(null);
+  const realTheme = config.autoTheme
+    ? isDarkMode
+      ? "dark"
+      : "light"
+    : config.theme;
 
-  useEffect(() => {
-    document.body.className = config.theme;
-  }, [config.theme]);
-
-  useEffect(() => {
-    if (config.autoTheme) {
-      config.changeTheme(isDarkMode ? "dark" : "light");
-    }
-  }, [isDarkMode, config.autoTheme]);
+  // 使用useLayoutEffect避免闪屏
+  useLayoutEffect(() => {
+    document.body.className = realTheme;
+    config.changeTheme(realTheme);
+  }, [realTheme]);
 
   return (
     <ConfigProvider theme={config.themeConfig}>

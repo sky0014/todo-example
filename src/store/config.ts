@@ -1,6 +1,5 @@
 import { createStore } from "@sky0014/store";
 import { ThemeConfig, theme } from "antd";
-import { getIsDarkMode } from "src/common/hooks/useDarkMode";
 
 type ThemeName = "light" | "dark";
 
@@ -35,12 +34,7 @@ class Config {
   }
 
   setAutoTheme(autoTheme: boolean) {
-    if (this.autoTheme !== autoTheme) {
-      this.autoTheme = autoTheme;
-      if (autoTheme) {
-        this.changeTheme(getIsDarkMode() ? "dark" : "light");
-      }
-    }
+    this.autoTheme = autoTheme;
   }
 
   changeTheme(theme: ThemeName) {
