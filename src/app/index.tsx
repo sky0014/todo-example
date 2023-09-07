@@ -23,7 +23,7 @@ import {
 import { DownOutlined, PlusOutlined } from "@ant-design/icons";
 import { todo } from "src/store/todo";
 import { useDarkMode } from "src/common/hooks/useDarkMode";
-import { config } from "src/store/config";
+import { config, themes } from "src/store/config";
 
 const AutoFocusInput = forwardRef<InputRef, InputProps>(function AutoFocusInput(
   props,
@@ -42,20 +42,17 @@ function App() {
   const isDarkMode = useDarkMode();
   const [modal, contextHolder] = Modal.useModal();
   const addInputRef = useRef<InputRef>(null);
-  const realTheme = config.autoTheme
-    ? isDarkMode
-      ? "dark"
-      : "light"
-    : config.theme;
+  const realTheme =
+    config.theme === "auto" ? (isDarkMode ? "dark" : "light") : config.theme;
+  const themeConfig = themes[realTheme];
 
   // 使用useLayoutEffect避免闪屏
   useLayoutEffect(() => {
     document.body.className = realTheme;
-    config.changeTheme(realTheme);
   }, [realTheme]);
 
   return (
-    <ConfigProvider theme={config.themeConfig}>
+    <ConfigProvider theme={themeConfig}>
       <Space direction="vertical" style={{ width: "100%" }}>
         <Row justify="space-between">
           <Col>
@@ -79,14 +76,9 @@ function App() {
                   },
                 ],
                 selectable: true,
-                defaultSelectedKeys: [config.autoTheme ? "auto" : config.theme],
+                defaultSelectedKeys: [config.theme],
                 onClick(info) {
-                  if (info.key === "auto") {
-                    config.setAutoTheme(true);
-                  } else {
-                    config.setAutoTheme(false);
-                    config.changeTheme(info.key as any);
-                  }
+                  config.changeTheme(info.key as any);
                 },
               }}
             >

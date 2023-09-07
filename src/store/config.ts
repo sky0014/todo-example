@@ -1,9 +1,9 @@
 import { createStore } from "@sky0014/store";
 import { ThemeConfig, theme } from "antd";
 
-type ThemeName = "light" | "dark";
+type ThemeName = "auto" | "light" | "dark";
 
-const themes: Record<ThemeName, ThemeConfig> = {
+export const themes: Record<Exclude<ThemeName, "auto">, ThemeConfig> = {
   light: {
     components: {
       Checkbox: {
@@ -25,17 +25,7 @@ const themes: Record<ThemeName, ThemeConfig> = {
 };
 
 class Config {
-  autoTheme = true;
-
-  theme: ThemeName = "light";
-
-  get themeConfig() {
-    return themes[this.theme];
-  }
-
-  setAutoTheme(autoTheme: boolean) {
-    this.autoTheme = autoTheme;
-  }
+  theme: ThemeName = "auto";
 
   changeTheme(theme: ThemeName) {
     this.theme = theme;
